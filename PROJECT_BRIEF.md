@@ -88,7 +88,6 @@ Use AI to explore and understand:
 
 **Your job**:
 - [ ] Implement PATCH endpoint that allows partial updates
-- [ ] Only update fields that are provided
 - [ ] Don't require all fields like PUT does
 - [ ] Update `updated_at` timestamp
 

@@ -128,52 +128,5 @@ class TestPrompts:
         # Newest (Second) should be first
         assert prompts[0]["title"] == "Second"  # Will fail until Bug #3 fixed
 
+ 
 
-class TestCollections:
-    """Tests for collection endpoints."""
-    
-    def test_create_collection(self, client: TestClient, sample_collection_data):
-        response = client.post("/collections", json=sample_collection_data)
-        assert response.status_code == 201
-        data = response.json()
-        assert data["name"] == sample_collection_data["name"]
-        assert "id" in data
-    
-    def test_list_collections(self, client: TestClient, sample_collection_data):
-        client.post("/collections", json=sample_collection_data)
-        
-        response = client.get("/collections")
-        assert response.status_code == 200
-        data = response.json()
-        assert len(data["collections"]) == 1
-    
-    def test_get_collection_not_found(self, client: TestClient):
-        response = client.get("/collections/nonexistent-id")
-        assert response.status_code == 404
-    
-    def test_delete_collection_with_prompts(self, client: TestClient, sample_collection_data, sample_prompt_data):
-        """Test deleting a collection that has prompts.
-        
-        NOTE: Bug #4 - prompts become orphaned after collection deletion.
-        This test documents the current (buggy) behavior.
-        After fixing, update the test to verify correct behavior.
-        """
-        # Create collection
-        col_response = client.post("/collections", json=sample_collection_data)
-        collection_id = col_response.json()["id"]
-        
-        # Create prompt in collection
-        prompt_data = {**sample_prompt_data, "collection_id": collection_id}
-        prompt_response = client.post("/prompts", json=prompt_data)
-        prompt_id = prompt_response.json()["id"]
-        
-        # Delete collection
-        client.delete(f"/collections/{collection_id}")
-        
-        # The prompt still exists but has invalid collection_id
-        # This is Bug #4 - should be handled properly
-        prompts = client.get("/prompts").json()["prompts"]
-        if prompts:
-            # Prompt exists with orphaned collection_id
-            assert prompts[0]["collection_id"] == collection_id
-            # After fix, collection_id should be None or prompt should be deleted

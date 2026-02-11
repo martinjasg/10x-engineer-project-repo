@@ -11,7 +11,7 @@ from app.models import (
     get_current_time
 )
 from app.storage import storage
-from app.utils import sort_prompts_by_date, filter_prompts_by_collection, search_prompts
+from app.utils import filter_prompts_by_collection, search_prompts
 from app import __version__
 
 
@@ -64,14 +64,12 @@ def list_prompts(
 
 @app.get("/prompts/{prompt_id}", response_model=Prompt)
 def get_prompt(prompt_id: str):
-    # BUG #1: This will raise a 500 error if prompt doesn't exist
-    # because we're accessing .id on None
-    # Should return 404 instead!
     prompt = storage.get_prompt(prompt_id)
     
-    # This line causes the bug - accessing attribute on None
-    if prompt.id:
-        return prompt
+    if not prompt:
+        raise HTTPException(status_code=404, detail="Prompt not found")
+    
+    return prompt
 
 
 @app.post("/prompts", response_model=Prompt, status_code=201)
@@ -107,7 +105,7 @@ def update_prompt(prompt_id: str, prompt_data: PromptUpdate):
         description=prompt_data.description,
         collection_id=prompt_data.collection_id,
         created_at=existing.created_at,
-        updated_at=existing.updated_at  # BUG: Should be get_current_time()
+        updated_at=get_current_time()  # Fix: Update the timestamp correctly
     )
     
     return storage.update_prompt(prompt_id, updated_prompt)
@@ -148,13 +146,30 @@ def create_collection(collection_data: CollectionCreate):
 
 @app.delete("/collections/{collection_id}", status_code=204)
 def delete_collection(collection_id: str):
-    # BUG #4: We delete the collection but don't handle the prompts!
-    # Prompts with this collection_id become orphaned with invalid reference
-    # Should either: delete the prompts, set collection_id to None, or prevent deletion
-    
+    # Check if collection exists before deletion
     if not storage.delete_collection(collection_id):
         raise HTTPException(status_code=404, detail="Collection not found")
     
-    # Missing: Handle prompts that belong to this collection!
-    
+    # Retrieve and update prompts associated with this collection
+    prompts_with_collection = storage.get_prompts_by_collection(collection_id)
+    for prompt in prompts_with_collection:
+        updated_prompt = Prompt(
+            id=prompt.id,
+            title=prompt.title,
+            content=prompt.content,
+            description=prompt.description,
+            collection_id=None,  # Disassociate from the deleted collection
+            created_at=prompt.created_at,
+            updated_at=get_current_time()  # Update timestamp
+        )
+        storage.update_prompt(prompt.id, updated_prompt)  # Persist changes
+
     return None
+
+
+# Sort utility function with applied change
+def sort_prompts_by_date(prompts, descending=True):
+    return sorted(prompts, key=lambda p: p.created_at, reverse=descending)
+
+
+
