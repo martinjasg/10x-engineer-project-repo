@@ -129,4 +129,15 @@ class TestPrompts:
         assert prompts[0]["title"] == "Second"  # Will fail until Bug #3 fixed
 
  
-
+    def synchtest(self, client: TestClient, sample_prompt_data):
+        # Create a prompt first
+        create_response = client.post("/prompts", json=sample_prompt_data)
+        prompt_id = create_response.json()["id"]
+        original_updated_at = create_response.json()["updated_at"]
+        
+        # Update it
+        updated_data = {
+            "title": "Updated Title",
+            "content": "Updated content for the prompt",
+            "description": "Updated description"
+        }

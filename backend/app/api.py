@@ -1,4 +1,4 @@
-# ============== Through Week 1 ==============
+
 """FastAPI routes for PromptLab"""
 
 from fastapi import FastAPI, HTTPException
