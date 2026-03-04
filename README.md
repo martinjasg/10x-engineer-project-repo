@@ -1,63 +1,53 @@
-# PromptLab: AI Prompt Engineering Platform
-
-PromptLab is a comprehensive platform designed for AI engineers to manage, organize, and utilize their AI prompts efficiently. Inspired by "Postman for Prompts," it offers features like prompt management, version control, and seamless API integration.
-
----
-
-## Table of Contents
-
-1. [Introduction](#introduction)
-2. [Features](#features)
-3. [Prerequisites](#prerequisites)
-4. [Installation](#installation)
-5. [Usage](#usage)
-6. [Project Structure](#project-structure)
-7. [API Documentation](#api-documentation)
-8. [Development](#development)
-9. [Contributing](#contributing)
-10. [License](#license)
-
----
-
-## Introduction
-
-### What is PromptLab?
-
-PromptLab is a tool designed to enhance the productivity of AI engineers by providing a sophisticated environment to manage AI prompts. It allows users to:
-- Store and manage prompt templates with variables
-- Organize prompts into various collections
-- Tag prompts for better searchability
-- Track prompt version history
-- Test prompts using sample inputs
-
-### Objectives
-
-Developed as part of a four-week engineering assignment, the goal is to transform PromptLab from a fledgling backend into a production-ready, full-stack application.
-
----
-
-## Features
-
-- **Prompt Management:** Store, edit, and delete prompts effortlessly.
-- **Collections:** Group prompts into user-defined collections.
-- **Search & Filters:** Enhanced search capabilities to find prompts faster.
-- **Version Control:** Track changes and maintain prompt versions.
-- **API Integration:** Robust API for easy third-party integrations.
-
----
-
-## Prerequisites
-
-Ensure you have the following before beginning installation:
-
-- **Python 3.10+:** Required for backend development.
-- **Node.js 18+:** Necessary for the frontend setup (commencing Week 4).
-- **Git:** Version control system.
 ---
 
 ## Installation
 
 To set up your development environment, follow these steps:
+
+1. **Clone the repository**
+
+---
+
+# Incident Management Platform
+
+This is an Incident Management Platform developed using FastAPI. The platform aims to facilitate the tracking and management of incidents within an organization, offering robust features for prompt and collection management using in-memory storage.
+
+---
+
+## Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Setup Instructions](#setup-instructions)
+3. [API Endpoints](#api-endpoints)
+4. [Data Models](#data-models)
+5. [Usage Examples](#usage-examples)
+6. [Development](#development)
+7. [Contributing](#contributing)
+8. [License](#license)
+
+---
+
+## Project Overview
+
+The Incident Management Platform is a backend application developed with FastAPI, designed to support the lifecycle of incident management. The application enables users to create, update, delete, and query incidents and their respective collections, ensuring efficient handling of incident data.
+
+### Key Features:
+- **Incident Creation & Management:** Add, update, and remove incidents easily.
+- **Collection Handling:** Organize incidents into collections for better management.
+- **Search & Filter:** Search incidents by titles or descriptions and filter by collections.
+- **In-Memory Storage:** Quick access and manipulation of data using in-memory storage.
+
+---
+
+## Setup Instructions
+
+To set up the application locally, ensure you have the following:
+
+- **Python 3.10+**
+- **FastAPI and Dependencies**
+- **Git**
+
+### Installation Steps
 
 1. **Clone the repository**
 
